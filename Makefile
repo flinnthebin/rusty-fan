@@ -12,15 +12,27 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 # General Public License for more details.
 
-CFLAGS:=-g -O2 -fstack-protector-strong -Wformat -Werror=format-security -Wall
-LDFLAGS:=-Wl,-Bsymbolic-functions -Wl,-z,relro
+CC := gcc
+CFLAGS := -g -O2 -fstack-protector-strong -Wformat -Werror=format-security -Wall
+LDFLAGS := -Wl,-Bsymbolic-functions -Wl,-z,relro
 
-all: fanctl
+PREFIX := /usr/local
+BINDIR := $(PREFIX)/bin
 
-fanctl: fanctl.c i8k.h fanctl.h
+TARGET := fanctl
 
-fanctl_DLIB.o: fanctl.c i8k.h fanctl.h
-	$(CC) $(CFLAGS) -Wall -c -g -DLIB fanctl.c -o fanctl_DLIB.o
+all: $(TARGET)
+
+$(TARGET): fanctl.c i8k.h fanctl.h
+	$(CC) $(CFLAGS) -o $(TARGET) fanctl.c $(LDFLAGS)
+
+install: $(TARGET)
+	install -d $(DESTDIR)$(BINDIR)
+	install -m 755 $(TARGET) $(DESTDIR)$(BINDIR)/$(TARGET)
+
+uninstall:
+	rm -f $(DESTDIR)$(BINDIR)/$(TARGET)
 
 clean:
-	rm -f fanctl *.o
+	rm -f $(TARGET)
+

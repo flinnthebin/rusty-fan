@@ -143,11 +143,11 @@ status()
     /*
      * User Info
      */
-    printf("CPU Temperature (°C): %d\n"
-           "Left Fan Mode (0-2]: %d\n"
-           "Right Fan Mode (0-2): %d\n"
-           "Left Speed (RPM): %d\n"
-           "Right Speed (RPM): %d\n",
+    printf("CPU Temperature  (°C): %d\n"
+           "Left Fan Mode   (0-2): %d\n"
+           "Right Fan Mode  (0-2): %d\n"
+           "Left Fan Speed  (RPM): %d\n"
+           "Right Fan Speed (RPM): %d\n",
            cpu_temp,
            left_fan,
            right_fan,
