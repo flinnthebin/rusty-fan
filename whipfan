@@ -1,25 +1,19 @@
 #!/usr/bin/env sh
 
-I8KCTL=/usr/bin/i8kctl
+FANCTL=/usr/bin/fanctl
 
 # Check if i8kctl exists and is executable
 if [ ! -x "$I8KCTL" ]; then
-    echo "Error: i8kfan needs $I8KCTL"
+    echo "Error: fanctl needs $FANCTL"
     exit 1
 fi
 
-# Handle command-line options
 if [[ "$1" == "-h" ]]; then
-    echo "Usage: i8kfan [left right]"
-    echo "       i8kfan [-v]"
+    echo "Usage: fan [left right]"
     exit 0
-elif [[ "$1" == "-v" ]]; then
-    exec "$I8KCTL" "-v"
 elif [ "$#" -gt 0 ]; then
-    # If arguments are provided, pass them to i8kctl fan
     exec "$I8KCTL" "fan" "$@"
 else
-    # No arguments provided, show menu with whiptail
     CHOICE=$(whiptail --title "Fan Speed Selection" --menu "Choose your option" 15 60 4 \
     "1" "Off" \
     "2" "Low" \
@@ -35,15 +29,15 @@ else
                 COMMANDS=("fan 0 0")
                 ;;
             2)
-                # Low: Set fans to off, wait 5 seconds, then set left fan to low, right fan off
+                # Low: Left Speed: 2400, Right Speed: 0
                 COMMANDS=("fan 0 0" "sleep 1" "fan 1 -1")
                 ;;
             3)
-                # High: Both fans to low speed
+                # High: Left Speed: 5500 Right Speed: 5500
                 COMMANDS=("fan 1 1")
                 ;;
             4)
-                # Intense: Both fans to high speed
+                # Intense: Left Speed: 6400 Right Speed: 5800
                 COMMANDS=("fan 2 2")
                 ;;
             *)
@@ -52,6 +46,7 @@ else
                 ;;
         esac
 
+        # Privilege determination
         if [ "$(id -u)" != "0" ]; then
             SUDO="sudo"
         else
@@ -68,7 +63,7 @@ else
             fi
         done
     else
-        echo "Operation cancelled by user."
+        echo "User exited."
         exit 1
     fi
 fi
