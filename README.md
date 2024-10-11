@@ -24,13 +24,32 @@ For my particular laptop, there are effectively 4 configurations for fan control
 If you are going to use Linux, I cannot recommend Manjaro/i3. It is a very well-maintained distro,
 with i3 out of the box so you don't have to remove GNOME/x11.
 
-## Whipfan
+## Safety
 
-Uses whiptail, if you like that kind of thing
+The Alienware Laptops come with Alienware Command Center on Windows distributions. They provide the same functionality,
+but with some sensor-driven safety features that will increase the fanspeed to prevent overheating.
 
-## Building fan
+This functionality is difficult to replicate on Linux and is not yet implemented.
 
-To compile use ```make```
+Anecdotally, my CPU temperature range at the various configurations are:
+
+Off:     70-75°C
+Low:     65-70°C
+High:    55-65°C
+Intense: 45-55°C
+
+If you are going to use fan to manually control your fanspeed, ensure you are routinely running fanctl and appropriately
+configuring your fanspeed to your usage. I made this because I love Linux, I love having Linux on nice hardware (I
+rarely go into double digit CPU usage) and I hope more people are encouraged to try to install Linux on nice hardware
+
+You don't need to wait for the Linux hardware to come to you! I started out with a 2012 Macbook Pro (in 2014) and
+headless Ubuntu and now we are here!
+
+## Installing fan
+
+``` bash
+sudo make install
+```
 
 # Those on whose shoulders I stand
 

@@ -12,6 +12,7 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 # General Public License for more details.
 
+
 CC := gcc
 CFLAGS := -g -O2 -fstack-protector-strong -Wformat -Werror=format-security -Wall
 LDFLAGS := -Wl,-Bsymbolic-functions -Wl,-z,relro
@@ -20,18 +21,21 @@ PREFIX := /usr/local
 BINDIR := $(PREFIX)/bin
 
 TARGET := fanctl
+SCRIPT := fan
 
 all: $(TARGET)
 
 $(TARGET): fanctl.c i8k.h fanctl.h
 	$(CC) $(CFLAGS) -o $(TARGET) fanctl.c $(LDFLAGS)
 
-install: $(TARGET)
+install: $(TARGET) $(SCRIPT)
 	install -d $(DESTDIR)$(BINDIR)
 	install -m 755 $(TARGET) $(DESTDIR)$(BINDIR)/$(TARGET)
+	install -m 755 $(SCRIPT) $(DESTDIR)$(BINDIR)/$(SCRIPT)
 
 uninstall:
 	rm -f $(DESTDIR)$(BINDIR)/$(TARGET)
+	rm -f $(DESTDIR)$(BINDIR)/$(SCRIPT)
 
 clean:
 	rm -f $(TARGET)
