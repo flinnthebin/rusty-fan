@@ -11,8 +11,9 @@ Note: fanctl is entirely built upon the dell-smm-hwmon kernel module.
 ## Fan
 
 Fan is a program that works on my Alienware m15 R5 with AMD Ryzen 9 5900HX.
-If you have any Alienware Laptop (or Dell Laptop), install Ubuntu and the bootloader
-displays the Alienware/Dell logo in tandem with the Ubuntu logo, then will probably work.
+If you have any Alienware Laptop (or Dell Laptop), install Ubuntu and if the bootloader
+displays the Alienware/Dell logo in tandem with the Ubuntu logo during the boot process
+then you likely have some compatible hardware.
 
 For my particular laptop, there are effectively 4 configurations for fan control.
 
