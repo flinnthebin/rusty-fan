@@ -160,8 +160,8 @@ status()
 void
 usage()
 {
-    printf("Usage: i8kctl [fan [<l> <r>] | speed | temp");
-    printf("       i8kctl [-h]\n");
+    printf("Usage: fanctl [fan [<l> <r>] | speed | temp\n");
+    printf("       fanctl -h\n");
 }
 
 #ifdef LIB
