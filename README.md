@@ -68,8 +68,6 @@ sudo make install
 
     Gianni Tedesco <gianni@ecsc.co.uk>
 
-	patch to restrict fan contol to SYS_ADMIN capability
-
     David Woodhouse <dwmw2@redhat.com>
 
     Vitor Augusto <vitorafsr@gmail.com>
