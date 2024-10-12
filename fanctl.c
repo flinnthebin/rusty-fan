@@ -172,7 +172,8 @@ usage()
     printf("    Typical configurations:\n");
     printf("      0 0 - Off: Both fans are off (any state)\n");
     printf("      1 -1 - Low: Left fan speed 2400 rpm, Right fan off (previous state must be 'Off')\n");
-    printf("      1 1 - High: Left fan speed 5500 rpm, Right fan speed 5500 rpm (any state)\n");
+    printf("      0 1 - Med: Left fan speed 0 rpm, Right fan 5100 rpm (any state)\n");
+    printf("      1 1 - High: Left fan spee 5500 rpm, Right fan speed 5500 rpm (any state)\n");
     printf("      2 2 - Intense: Left fan speed 6400 RPM, Right fan speed 5800 rpm (any state)\n");
     printf("\n");
     printf("  speed\n");

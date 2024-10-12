@@ -18,9 +18,10 @@ else
     echo "Please select a fan speed mode:"
     echo "1) Off"
     echo "2) Low"
-    echo "3) High"
-    echo "4) Intense"
-    read -p "Enter your choice [1-4]: " choice
+    echo "3) Medium"
+    echo "4) High"
+    echo "5) Max"
+    read -p "Enter your choice [1-5]: " choice
 
     case $choice in
         1)
@@ -32,11 +33,15 @@ else
             commands=("fan 0 0" "sleep 1" "fan 1 -1")
             ;;
         3)
+            # med: left speed: 0 right speed: 5100
+            commands=("fan 0 1")
+            ;;
+        4)
             # high: left speed: 5500 right speed: 5500
             commands=("fan 1 1")
             ;;
-        4)
-            # intense: left speed: 6400 right speed: 5800
+        5)
+            # max: left speed: 6400 right speed: 5800
             commands=("fan 2 2")
             ;;
         *)

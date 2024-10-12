@@ -18,7 +18,8 @@ then you likely have some compatible hardware.
 For my particular laptop, there are effectively 4 configurations for fan control.
 
     Off: Both fans off
-    Low: Left Speed: 2400, Right Speed: 0
+    Low: Left Speed: 2400 Right Speed: 0
+    Medium: Left Speed: 0 Right Speed: 5100
     High: Left Speed: 5500 Right Speed: 5500
     Intense: Left Speed: 6400 Right Speed: 5800
 
@@ -35,6 +36,7 @@ Anecdotally, my CPU temperature range at the various configurations are:
 
     Off:     70-75°C
     Low:     65-70°C
+    Medium:  60-65°C
     High:    55-65°C
     Intense: 45-55°C
 
@@ -54,7 +56,6 @@ configuring this tool, there is an issue of hot air accumulating around the CPU 
 Fanmgr monitors the CPU temperature every 10 seconds and if temperatures exceed 75°C, it will switch the fan speed to
 high for a 10 second burst, then report the new recorded temperature (usually around 65°C). fanmgr works
 really well for me, usually only requiring 1-2 bursts an hour to maintain a healthy CPU temperature.
-
 ## fanctl
 
 Fanctl is the all-purpose tool, the help menu is comprehensive
@@ -67,6 +68,8 @@ fanctl -h
 
 ``` bash
 sudo make install
+echo "i8k" | sudo tee /etc/modules-load.d/i8k.conf
+echo "options i8k force=1" | sudo tee /etc/modprobe.d/i8k.conf
 ```
 
 # Those on whose shoulders I stand
