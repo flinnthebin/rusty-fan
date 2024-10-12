@@ -57,7 +57,11 @@ really well for me, usually only requiring 1-2 bursts an hour to maintain a heal
 
 ## fanctl
 
-Fanctl is the all-purpose tool, use fanctl -h to see the help menu
+Fanctl is the all-purpose tool, the help menu is comprehensive
+
+```bash
+fanctl -h
+```
 
 ## Installing fan
 
