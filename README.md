@@ -1,6 +1,6 @@
 # Package adopted
 
-https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=948521
+https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=948521  
 https://www.debian.org/devel/wnpp/rfa
 
 ## i8k
@@ -17,10 +17,10 @@ then you likely have some compatible hardware.
 
 For my particular laptop, there are effectively 4 configurations for fan control.
 
-    # Off: Both fans off
-    # Low: Left Speed: 2400, Right Speed: 0
-    # High: Left Speed: 5500 Right Speed: 5500
-    # Intense: Left Speed: 6400 Right Speed: 5800
+    Off: Both fans off
+    Low: Left Speed: 2400, Right Speed: 0
+    High: Left Speed: 5500 Right Speed: 5500
+    Intense: Left Speed: 6400 Right Speed: 5800
 
 If you are going to use Linux, I cannot recommend Manjaro/i3. It is a very well-maintained distro,
 with i3 out of the box so you don't have to remove GNOME/x11.
@@ -34,10 +34,10 @@ This functionality is difficult to replicate on Linux and is not yet implemented
 
 Anecdotally, my CPU temperature range at the various configurations are:
 
-Off:     70-75°C
-Low:     65-70°C
-High:    55-65°C
-Intense: 45-55°C
+    Off:     70-75°C
+    Low:     65-70°C
+    High:    55-65°C
+    Intense: 45-55°C
 
 If you are going to use fan to manually control your fanspeed, ensure you are routinely running fanctl and appropriately
 configuring your fanspeed to your usage. I made this because I love Linux, I love having Linux on nice hardware (I
