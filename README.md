@@ -8,7 +8,7 @@ https://www.debian.org/devel/wnpp/rfa
 Linux driver for accessing the SMM BIOS on Dell laptops  
 Note: fanctl is entirely built upon the dell-smm-hwmon kernel module.
 
-## Fan
+## fan
 
 Fan is a program that works on my Alienware m15 R5 with AMD Ryzen 9 5900HX.
 If you have any Alienware Laptop (or Dell Laptop), install Ubuntu and if the bootloader
@@ -30,9 +30,6 @@ with i3 out of the box so you don't have to remove GNOME/x11.
 The Alienware Laptops come with Alienware Command Center on Windows distributions. They provide the same functionality,
 but with some sensor-driven safety features that will increase the fanspeed to prevent overheating.
 
-This functionality is difficult to replicate on Linux and is not yet implemented. It seems as thought the temperature
-sensor for the CPU accumulates to 70-80 degrees when the air around the CPU is still, disappears after a 2 second pulse
-and the temperature usually returns to the mid 60s.
 
 Anecdotally, my CPU temperature range at the various configurations are:
 
@@ -47,6 +44,20 @@ rarely go into double digit CPU usage) and I hope more people are encouraged to 
 
 You don't need to wait for the Linux hardware to come to you! I started out with a 2012 Macbook Pro (in 2014) and
 headless Ubuntu and now we are here!
+
+## fanmgr
+
+Fanmgr is my solution to mimic the functionality of the Alienware Command Center safety features. From my experience
+configuring this tool, there is an issue of hot air accumulating around the CPU and increasing the sensor readings to
+80-90 degrees.
+
+Fanmgr monitors the CPU temperature every 10 seconds and if temperatures exceed 75°C, it will switch the fan speed to
+high for a 10 second burst, then report the new recorded temperature (usually around 65°C). fanmgr works
+really well for me, usually only requiring 1-2 bursts an hour to maintain a healthy CPU temperature.
+
+## fanctl
+
+Fanctl is the all-purpose tool, use fanctl -h to see the help menu
 
 ## Installing fan
 
