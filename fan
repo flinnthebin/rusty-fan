@@ -12,7 +12,7 @@ if [[ "$1" == "-h" ]]; then
     exit 0
 elif [ "$#" -gt 0 ]; then
     # pass args to i8kctl fan
-    exec "$i8kctl" "fan" "$@"
+    exec "$fanctl" "fan" "$@"
 else
     # interface
     echo "Please select a fan speed mode:"
