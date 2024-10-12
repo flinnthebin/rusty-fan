@@ -5,7 +5,7 @@ https://www.debian.org/devel/wnpp/rfa
 
 ## i8k
 
-Linux driver for accessing the SMM BIOS on Dell laptops
+Linux driver for accessing the SMM BIOS on Dell laptops  
 Note: fanctl is entirely built upon the dell-smm-hwmon kernel module.
 
 ## Fan
