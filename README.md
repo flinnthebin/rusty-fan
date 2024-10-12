@@ -22,7 +22,7 @@ For my particular laptop, there are effectively 4 configurations for fan control
     High: Left Speed: 5500 Right Speed: 5500
     Intense: Left Speed: 6400 Right Speed: 5800
 
-If you are going to use Linux, I cannot recommend Manjaro/i3. It is a very well-maintained distro,
+If you are going to use Linux, I highly recommend Manjaro/i3. It is a very well-maintained distro,
 with i3 out of the box so you don't have to remove GNOME/x11.
 
 ## Safety
