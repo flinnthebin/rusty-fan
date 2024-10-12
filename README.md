@@ -30,7 +30,9 @@ with i3 out of the box so you don't have to remove GNOME/x11.
 The Alienware Laptops come with Alienware Command Center on Windows distributions. They provide the same functionality,
 but with some sensor-driven safety features that will increase the fanspeed to prevent overheating.
 
-This functionality is difficult to replicate on Linux and is not yet implemented.
+This functionality is difficult to replicate on Linux and is not yet implemented. It seems as thought the temperature
+sensor for the CPU accumulates to 70-80 degrees when the air around the CPU is still, disappears after a 2 second pulse
+and the temperature usually returns to the mid 60s.
 
 Anecdotally, my CPU temperature range at the various configurations are:
 
