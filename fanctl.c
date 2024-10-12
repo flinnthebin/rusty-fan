@@ -105,7 +105,8 @@ fan(int argc, char **argv)
 	right = i8k_get_fan_status(I8K_FAN_RIGHT);
     }
 
-    printf("%d %d\n", left, right);
+    printf("Left Fan Mode  (0-2): %d\n"
+           "Right Fan Mode (0-2): %d\n", left, right);
     return 0;
 }
 
@@ -117,14 +118,15 @@ fan_speed(int argc, char **argv)
     left = i8k_get_fan_speed(I8K_FAN_LEFT);
     right = i8k_get_fan_speed(I8K_FAN_RIGHT);
 
-    printf("%d %d\n", left, right);
+    printf("Left Fan Speed  (rpm): %d\n"
+           "Right Fan Speed (rpm): %d\n", left, right);
     return 0;
 }
 
 int
 cpu_temperature()
 {
-    printf("%d\n", i8k_get_cpu_temp());
+    printf("CPU Temperature  (°C): %d\n", i8k_get_cpu_temp());
     return 0;
 }
 
@@ -145,13 +147,13 @@ status()
      */
     printf("CPU Temperature  (°C): %d\n"
            "Left Fan Mode   (0-2): %d\n"
+           "Left Fan Speed  (rpm): %d\n"
            "Right Fan Mode  (0-2): %d\n"
-           "Left Fan Speed  (RPM): %d\n"
-           "Right Fan Speed (RPM): %d\n",
+           "Right Fan Speed (rpm): %d\n",
            cpu_temp,
            left_fan,
-           right_fan,
            left_speed,
+           right_fan,
            right_speed);
 
     return 0;
@@ -160,8 +162,37 @@ status()
 void
 usage()
 {
-    printf("Usage: fanctl [fan [<l> <r>] | speed | temp\n");
-    printf("       fanctl -h\n");
+    printf("Usage: fanctl [command] [arguments]\n");
+    printf("\n");
+    printf("Commands:\n");
+    printf("  fan l r\n");
+    printf("    Sets the speed of the left and right fans.\n");
+    printf("    - l: Speed setting for the left fan (0 - 2)\n");
+    printf("    - r: Speed setting for the right fan (0 - 2)\n\n");
+    printf("    Typical configurations:\n");
+    printf("      0 0 - Off: Both fans are off (any state)\n");
+    printf("      1 -1 - Low: Left fan speed 2400 rpm, Right fan off (previous state must be 'Off')\n");
+    printf("      1 1 - High: Left fan speed 5500 rpm, Right fan speed 5500 rpm (any state)\n");
+    printf("      2 2 - Intense: Left fan speed 6400 RPM, Right fan speed 5800 rpm (any state)\n");
+    printf("\n");
+    printf("  speed\n");
+    printf("    Displays the current speed of the left and right fans in rpm.\n");
+    printf("\n");
+    printf("  temp\n");
+    printf("    Displays the current CPU temperature in degrees Celsius.\n");
+    printf("\n");
+    printf("  -h\n");
+    printf("    Displays this help message.\n");
+    printf("\n");
+    printf("Examples:\n");
+    printf("  fanctl fan 1 1\n");
+    printf("    Sets both fans to high speed.\n");
+    printf("\n");
+    printf("  fanctl speed\n");
+    printf("    Displays the current RPM of both fans.\n");
+    printf("\n");
+    printf("  fanctl temp\n");
+    printf("    Displays the current CPU temperature.\n");
 }
 
 #ifdef LIB
