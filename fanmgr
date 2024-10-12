@@ -1,0 +1,66 @@
+#!/usr/bin/env sh
+
+PID="/tmp/fanmgr.pid"
+
+start_fanmgr() {
+    if [ -f "$PID" ]; then
+        echo "fanmgr already active [PID: $(cat $PID)]"
+        exit 1
+    fi
+
+    "$0" --background &
+    pid=$!
+    echo $pid > "$PID"
+    echo "fanmgr active [PID: $pid]"
+    exit 0
+}
+
+kill_fanmgr() {
+    if [ ! -f "$PID" ]; then
+        echo "fanmanager inactive."
+        exit 1
+    fi
+
+    pid=$(cat "$PID")
+    kill "$pid" && rm -f "$PID"
+    echo "fanmgr inactive."
+    exit 0
+}
+
+get_cpu_temp() {
+    output=$(fanctl)
+    temp=$(echo "$output" | awk '/CPU Temperature/ {print $NF}')
+}
+
+# Parse arguments
+if [ "$1" = "-k" ]; then
+    kill_fanmgr
+fi
+
+if [ "$1" != "--background" ]; then
+    start_fanmgr
+fi
+
+# Main 
+while true; do
+    get_cpu_temp
+
+    if [ "$temp" -gt 75 ]; then
+        echo "CPU temperature warning ($temp°C)! Starting fans..."
+
+        # pulse still air around CPU
+        sudo fan 1 1 > /dev/null 2>&1
+        sleep 10
+
+        # reset fan to low
+        sudo fan 0 0 > /dev/null 2>&1
+        sudo fan 1 -1 > /dev/null 2>&1
+
+        # confirm success
+        get_cpu_temp
+        echo "CPU temperature after fan adjustment: $temp°C"
+    fi
+
+    sleep 10
+done
+
