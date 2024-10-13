@@ -48,6 +48,8 @@ fanctl -h
 
 ## Installing fan
 
+These modules should load if you pass the Ubuntu Bootloader test.
+
 ``` bash
 sudo make install
 echo "i8k" | sudo tee /etc/modules-load.d/i8k.conf
