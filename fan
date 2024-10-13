@@ -11,7 +11,7 @@ if [[ "$1" == "-h" ]]; then
     echo "Usage: fan [left right]"
     exit 0
 elif [ "$#" -gt 0 ]; then
-    # pass args to i8kctl fan
+    # pass args to fanctl fan
     exec "$fanctl" "fan" "$@"
 else
     # interface
