@@ -37,7 +37,7 @@ else
             commands=("fan 0 1")
             ;;
         4)
-            # high: left speed: 5500 right speed: 5500
+            # high: left speed: 2400 right speed: 5500
             commands=("fan 1 1")
             ;;
         5)
