@@ -31,15 +31,6 @@ with i3 out of the box so you don't have to remove GNOME/x11.
 The Alienware Laptops come with Alienware Command Center on Windows distributions. They provide the same functionality,
 but with some sensor-driven safety features that will increase the fanspeed to prevent overheating.
 
-
-Anecdotally, my CPU temperature range at the various configurations are:
-
-    Off:     70-75°C
-    Low:     65-70°C
-    Medium:  60-65°C
-    High:    55-65°C
-    Intense: 45-55°C
-
 If you are going to use fan to manually control your fanspeed, ensure you are routinely running fanctl and appropriately
 configuring your fanspeed to your usage. I made this because I love Linux, I love having Linux on nice hardware (I
 rarely go into double digit CPU usage) and I hope more people are encouraged to try to install Linux on nice hardware
@@ -49,13 +40,8 @@ headless Ubuntu and now we are here!
 
 ## fanmgr
 
-Fanmgr is my solution to mimic the functionality of the Alienware Command Center safety features. From my experience
-configuring this tool, there is an issue of hot air accumulating around the CPU and increasing the sensor readings to
-80-90 degrees.
+Add the following line to your .bashrc or .zshrc
 
-Fanmgr monitors the CPU temperature every 10 seconds and if temperatures exceed 75°C, it will switch the fan speed to
-high for a 10 second burst, then report the new recorded temperature (usually around 65°C). fanmgr works
-really well for me, usually only requiring 1-2 bursts an hour to maintain a healthy CPU temperature.
 ## fanctl
 
 Fanctl is the all-purpose tool, the help menu is comprehensive

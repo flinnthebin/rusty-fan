@@ -47,8 +47,8 @@ kill_fanmgr() {
 }
 
 get_cpu_temp() {
-    TEMP=$(cat /sys/class/thermal/thermal_zone0/temp)
-    echo $((TEMP / 1000))  # millidegrees to °C
+    fanctl_output=$(fanctl)  # Run fanctl to get the status
+    echo "$fanctl_output" | grep "CPU Temperature" | awk '{print $NF}'  # Extract temperature value
 }
 
 average_temp() {
@@ -62,27 +62,55 @@ average_temp() {
     [ $count -gt 0 ] && echo $((total / count)) || echo 0
 }
 
+
 monitor_temp() {
+    current_mode="0 0" # state mgmt 
 
     while true; do
         temp=$(get_cpu_temp)
         echo "$temp" >> "$TEMP_HISTORY"
 
-        # ensure data is current 
+        # Ensure only the latest N samples are kept
         [ $(wc -l < "$TEMP_HISTORY") -gt $SAMPLES ] && sed -i '1d' "$TEMP_HISTORY"
 
         avg_temp=$(average_temp)
+        #echo "Average temperature: $avg_temp°C, Current fan mode: $current_mode"  # Debug
 
-        if [ "$avg_temp" -lt 40 ]; then
-            fan_mode "0 0"  # Both fans off
-        elif [ "$avg_temp" -ge 40 ] && [ "$avg_temp" -lt 50 ]; then
-            fan_mode "1 -1"  # Left fan 2400 rpm, right fan off
-        elif [ "$avg_temp" -ge 50 ] && [ "$avg_temp" -lt 55 ]; then
-            fan_mode "0 1"  # Right fan 5100 rpm, left fan off
-        elif [ "$avg_temp" -ge 55 ] && [ "$avg_temp" -lt 65 ]; then
-            fan_mode "1 1"  # Left 2400 rpm, right 5100 rpm
+        if [ "$avg_temp" -lt 50 ]; then
+            # off
+            if [ "$current_mode" != "0 0" ]; then
+                fan_mode "0 0"
+                current_mode="0 0"
+            fi
+        elif [ "$avg_temp" -ge 50 ] && [ "$avg_temp" -lt 60 ]; then
+            # left fan 2400 RPM, right fan off (only accessible from 0 0)
+            if [ "$current_mode" != "1 -1" ]; then
+                if [ "$current_mode" != "0 0" ]; then
+                    fan_mode "0 0"
+                    current_mode="0 0"
+                    sleep 1  # transition delay
+                fi
+                fan_mode "1 -1"
+                current_mode="1 -1"
+            fi
+        elif [ "$avg_temp" -ge 60 ] && [ "$avg_temp" -lt 70 ]; then
+            # Right fan 5100 RPM, left fan off
+            if [ "$current_mode" != "0 1" ]; then
+                fan_mode "0 1"
+                current_mode="0 1"
+            fi
+        elif [ "$avg_temp" -ge 70 ] && [ "$avg_temp" -lt 80 ]; then
+            # Left 2400 RPM, right 5100 RPM
+            if [ "$current_mode" != "1 1" ]; then
+                fan_mode "1 1"
+                current_mode="1 1"
+            fi
         else
-            fan_mode "2 2"  # Left 6300 rpm, right 5800 rpm
+            # Left 6300 RPM, right 5800 RPM (max)
+            if [ "$current_mode" != "2 2" ]; then
+                fan_mode "2 2"
+                current_mode="2 2"
+            fi
         fi
 
         sleep "$SAMPLE_INTERVAL"
