@@ -1,6 +1,26 @@
 #!/usr/bin/env sh
 
+#####################
+#                   #
+#      CONFIG       #
+#                   #
+#####################
+
 PID="/tmp/fanmgr.pid"
+TEMP_HISTORY="/tmp/temp_history"
+SAMPLE_INTERVAL=2   # Temp check interval (s)
+SAMPLES=5           # No. samples for mean avg 
+
+#####################
+#                   #
+#      CONFIG       #
+#                   #
+#####################
+
+fan_mode() {
+    echo "Setting fan mode: $1"
+    sudo fan $1 > /dev/null 2>&1
+}
 
 start_fanmgr() {
     if [ -f "$PID" ]; then
@@ -17,50 +37,66 @@ start_fanmgr() {
 
 kill_fanmgr() {
     if [ ! -f "$PID" ]; then
-        echo "fanmanager inactive."
+        echo "fanmgr inactive."
         exit 1
     fi
 
     pid=$(cat "$PID")
-    kill "$pid" && rm -f "$PID"
+    kill "$pid" && rm -f "$PID" "$TEMP_HISTORY"
     echo "fanmgr inactive."
     exit 0
 }
 
 get_cpu_temp() {
-    output=$(fanctl)
-    temp=$(echo "$output" | awk '/CPU Temperature/ {print $NF}')
+    TEMP=$(cat /sys/class/thermal/thermal_zone0/temp)
+    echo $((TEMP / 1000))  # millidegrees to °C
 }
 
-# Parse arguments
+average_temp() {
+    total=0
+    count=0
+    while read -r t; do
+        total=$((total + t))
+        count=$((count + 1))
+    done < "$TEMP_HISTORY"
+
+    [ $count -gt 0 ] && echo $((total / count)) || echo 0
+}
+
+monitor_temp() {
+
+    while true; do
+        temp=$(get_cpu_temp)
+        echo "$temp" >> "$TEMP_HISTORY"
+
+        # ensure data is current 
+        [ $(wc -l < "$TEMP_HISTORY") -gt $SAMPLES ] && sed -i '1d' "$TEMP_HISTORY"
+
+        avg_temp=$(average_temp)
+
+        if [ "$avg_temp" -lt 40 ]; then
+            fan_mode "0 0"  # Both fans off
+        elif [ "$avg_temp" -ge 40 ] && [ "$avg_temp" -lt 50 ]; then
+            fan_mode "1 -1"  # Left fan 2400 RPM, right fan off
+        elif [ "$avg_temp" -ge 50 ] && [ "$avg_temp" -lt 55 ]; then
+            fan_mode "0 1"  # Right fan 5100 RPM, left fan off
+        elif [ "$avg_temp" -ge 55 ] && [ "$avg_temp" -lt 65 ]; then
+            fan_mode "1 1"  # Left 2400 RPM, right 5100 RPM
+        else
+            fan_mode "2 2"  # Left 6300 RPM, right 5800 RPM
+        fi
+
+        sleep "$SAMPLE_INTERVAL"
+    done
+}
+
+# Parse args
 if [ "$1" = "-k" ]; then
     kill_fanmgr
-fi
-
-if [ "$1" != "--background" ]; then
+elif [ "$1" != "--background" ]; then
     start_fanmgr
 fi
 
-# Main 
-while true; do
-    get_cpu_temp
-
-    if [ "$temp" -gt 75 ]; then
-        echo "CPU temperature warning ($temp°C)! Starting fans..."
-
-        # pulse still air around CPU
-        sudo fan 2 2 > /dev/null 2>&1
-        sleep 20
-
-        # reset fan to low
-        sudo fan 0 0 > /dev/null 2>&1
-        sudo fan 1 -1 > /dev/null 2>&1
-
-        # confirm success
-        get_cpu_temp
-        echo "CPU temperature after fan adjustment: $temp°C"
-    fi
-
-    sleep 10
-done
+# Main
+monitor_temp
 
