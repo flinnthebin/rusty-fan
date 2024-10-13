@@ -1,20 +1,22 @@
 #!/usr/bin/env sh
 
 #####################
-#                   #
 #      CONFIG       #
-#                   #
 #####################
+
+LOW=50     # Below this, fans are off (0 0)
+MEDIUM=60  # Between LOW-MEDIUM, left fan 2400 RPM, right fan off (1 -1)
+HIGH=70    # Between MEDIUM-HIGH, right fan 5100 RPM, left fan off (0 1)
+MAX=80     # Between HIGH-MAX, both fans on (1 1)
+OVER_MAX=80  # Above OVER_MAX, max speed (2 2)
 
 PID="/tmp/fanmgr.pid"
 TEMP_HISTORY="/tmp/temp_history"
-SAMPLE_INTERVAL=2   # Temp check interval (s)
-SAMPLES=5           # No. samples for mean avg 
+SAMPLE_INTERVAL=1   # Temp check interval (seconds)
+SAMPLES=5           # Number of samples for mean average
 
 #####################
-#                   #
-#      CONFIG       #
-#                   #
+#      HELPERS      #
 #####################
 
 fan_mode() {
@@ -47,8 +49,8 @@ kill_fanmgr() {
 }
 
 get_cpu_temp() {
-    fanctl_output=$(fanctl)  # Run fanctl to get the status
-    echo "$fanctl_output" | grep "CPU Temperature" | awk '{print $NF}'  # Extract temperature value
+    fanctl_output=$(fanctl)
+    echo "$fanctl_output" | grep "CPU Temperature" | awk '{print $NF}'  #
 }
 
 average_temp() {
@@ -62,51 +64,46 @@ average_temp() {
     [ $count -gt 0 ] && echo $((total / count)) || echo 0
 }
 
-
 monitor_temp() {
-    current_mode="0 0" # state mgmt 
+    current_mode="0 0" # state tracking
 
     while true; do
         temp=$(get_cpu_temp)
         echo "$temp" >> "$TEMP_HISTORY"
 
-        # Ensure only the latest N samples are kept
         [ $(wc -l < "$TEMP_HISTORY") -gt $SAMPLES ] && sed -i '1d' "$TEMP_HISTORY"
-
         avg_temp=$(average_temp)
-        #echo "Average temperature: $avg_temp°C, Current fan mode: $current_mode"  # Debug
 
-        if [ "$avg_temp" -lt 50 ]; then
-            # off
+        if [ "$avg_temp" -lt "$LOW" ]; then
             if [ "$current_mode" != "0 0" ]; then
                 fan_mode "0 0"
                 current_mode="0 0"
             fi
-        elif [ "$avg_temp" -ge 50 ] && [ "$avg_temp" -lt 60 ]; then
-            # left fan 2400 RPM, right fan off (only accessible from 0 0)
+
+        elif [ "$avg_temp" -ge "$LOW" ] && [ "$avg_temp" -lt "$MEDIUM" ]; then
             if [ "$current_mode" != "1 -1" ]; then
                 if [ "$current_mode" != "0 0" ]; then
-                    fan_mode "0 0"
+                    fan_mode "0 0"  # 1 -1 only works if prev state was 0 0
                     current_mode="0 0"
-                    sleep 1  # transition delay
+                    sleep 1
                 fi
                 fan_mode "1 -1"
                 current_mode="1 -1"
             fi
-        elif [ "$avg_temp" -ge 60 ] && [ "$avg_temp" -lt 70 ]; then
-            # Right fan 5100 RPM, left fan off
+
+        elif [ "$avg_temp" -ge "$MEDIUM" ] && [ "$avg_temp" -lt "$HIGH" ]; then
             if [ "$current_mode" != "0 1" ]; then
                 fan_mode "0 1"
                 current_mode="0 1"
             fi
-        elif [ "$avg_temp" -ge 70 ] && [ "$avg_temp" -lt 80 ]; then
-            # Left 2400 RPM, right 5100 RPM
+
+        elif [ "$avg_temp" -ge "$HIGH" ] && [ "$avg_temp" -lt "$MAX" ]; then
             if [ "$current_mode" != "1 1" ]; then
                 fan_mode "1 1"
                 current_mode="1 1"
             fi
+
         else
-            # Left 6300 RPM, right 5800 RPM (max)
             if [ "$current_mode" != "2 2" ]; then
                 fan_mode "2 2"
                 current_mode="2 2"
@@ -117,13 +114,14 @@ monitor_temp() {
     done
 }
 
-# Parse args
+#####################
+#       MAIN        #
+#####################
+
 if [ "$1" = "-k" ]; then
     kill_fanmgr
 elif [ "$1" != "--background" ]; then
     start_fanmgr
 fi
 
-# Main
 monitor_temp
-

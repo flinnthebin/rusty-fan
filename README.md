@@ -31,11 +31,8 @@ with i3 out of the box so you don't have to remove GNOME/x11.
 The Alienware Laptops come with Alienware Command Center on Windows distributions. They provide the same functionality,
 but with some sensor-driven safety features that will increase the fanspeed to prevent overheating.
 
-If you are going to use fan to manually control your fanspeed, ensure you are routinely running fanctl and appropriately
-configuring your fanspeed to your usage. I made this because I love Linux, I love having Linux on nice hardware (I
-rarely go into double digit CPU usage) and I hope more people are encouraged to try to install Linux on nice hardware
-but you need to be responsible for the safety of your own hardware with this software.
-
+I believe the configuration of fanmgr is reasonably close to the ACC setup, but please run fanctl yourself regularly
+and check that its right on your hardware, and edit the fanmgr script to your personal preferences
 ## fanmgr
 
 The config for this is reasonably smooth now, if you have any suggestions for improvement please feel free to send me an
