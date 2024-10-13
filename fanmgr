@@ -18,7 +18,6 @@ SAMPLES=5           # No. samples for mean avg
 #####################
 
 fan_mode() {
-    echo "Setting fan mode: $1"
     sudo fan $1 > /dev/null 2>&1
 }
 
@@ -77,13 +76,13 @@ monitor_temp() {
         if [ "$avg_temp" -lt 40 ]; then
             fan_mode "0 0"  # Both fans off
         elif [ "$avg_temp" -ge 40 ] && [ "$avg_temp" -lt 50 ]; then
-            fan_mode "1 -1"  # Left fan 2400 RPM, right fan off
+            fan_mode "1 -1"  # Left fan 2400 rpm, right fan off
         elif [ "$avg_temp" -ge 50 ] && [ "$avg_temp" -lt 55 ]; then
-            fan_mode "0 1"  # Right fan 5100 RPM, left fan off
+            fan_mode "0 1"  # Right fan 5100 rpm, left fan off
         elif [ "$avg_temp" -ge 55 ] && [ "$avg_temp" -lt 65 ]; then
-            fan_mode "1 1"  # Left 2400 RPM, right 5100 RPM
+            fan_mode "1 1"  # Left 2400 rpm, right 5100 rpm
         else
-            fan_mode "2 2"  # Left 6300 RPM, right 5800 RPM
+            fan_mode "2 2"  # Left 6300 rpm, right 5800 rpm
         fi
 
         sleep "$SAMPLE_INTERVAL"
