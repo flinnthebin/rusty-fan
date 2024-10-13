@@ -34,13 +34,12 @@ but with some sensor-driven safety features that will increase the fanspeed to p
 If you are going to use fan to manually control your fanspeed, ensure you are routinely running fanctl and appropriately
 configuring your fanspeed to your usage. I made this because I love Linux, I love having Linux on nice hardware (I
 rarely go into double digit CPU usage) and I hope more people are encouraged to try to install Linux on nice hardware
-
-You don't need to wait for the Linux hardware to come to you! I started out with a 2012 Macbook Pro (in 2014) and
-headless Ubuntu and now we are here!
+but you need to be responsible for the safety of your own hardware with this software.
 
 ## fanmgr
 
-Add the following line to your .bashrc or .zshrc
+The config for this is reasonably smooth now, if you have any suggestions for improvement please feel free to send me an
+email!
 
 ## fanctl
 
