@@ -32,65 +32,55 @@
 
 static int i8k_fd;
 
-int
-i8k_set_fan(int fan, int speed)
-{
+int i8k_set_fan(int fan, int speed) {
     int args[2];
     int rc;
 
     args[0] = fan;
     args[1] = speed;
-    if ((rc=ioctl(i8k_fd, I8K_SET_FAN, &args)) < 0) {
+    if ((rc = ioctl(i8k_fd, I8K_SET_FAN, &args)) < 0) {
 	return rc;
     }
 
     return args[0];
 }
 
-int
-i8k_get_fan_status(int fan)
-{
+int i8k_get_fan_status(int fan) {
     int args[1];
     int rc;
 
     args[0] = fan;
-    if ((rc=ioctl(i8k_fd, I8K_GET_FAN, &args)) < 0) {
+    if ((rc = ioctl(i8k_fd, I8K_GET_FAN, &args)) < 0) {
 	return rc;
     }
 
     return args[0];
 }
 
-int
-i8k_get_fan_speed(int fan)
-{
+int i8k_get_fan_speed(int fan) {
     int args[1];
     int rc;
 
     args[0] = fan;
-    if ((rc=ioctl(i8k_fd, I8K_GET_SPEED, &args)) < 0) {
+    if ((rc = ioctl(i8k_fd, I8K_GET_SPEED, &args)) < 0) {
 	return rc;
     }
 
     return args[0];
 }
 
-int
-i8k_get_cpu_temp()
-{
+int i8k_get_cpu_temp() {
     int args[1];
     int rc;
 
-    if ((rc=ioctl(i8k_fd, I8K_GET_TEMP, &args)) < 0) {
+    if ((rc = ioctl(i8k_fd, I8K_GET_TEMP, &args)) < 0) {
 	return rc;
     }
 
     return args[0];
 }
 
-int
-fan(int argc, char **argv)
-{
+int fan(int argc, char **argv) {
     int left, right;
 
     if ((argc > 1) && isdigit(argv[1][0])) {
@@ -110,9 +100,7 @@ fan(int argc, char **argv)
     return 0;
 }
 
-int
-fan_speed(int argc, char **argv)
-{
+int fan_speed(int argc, char **argv) {
     int left, right;
 
     left = i8k_get_fan_speed(I8K_FAN_LEFT);
@@ -123,16 +111,12 @@ fan_speed(int argc, char **argv)
     return 0;
 }
 
-int
-cpu_temperature()
-{
+int cpu_temperature() {
     printf("CPU Temperature  (°C): %d\n", i8k_get_cpu_temp());
     return 0;
 }
 
-int
-status()
-{
+int status() {
     int cpu_temp;
     int left_fan, right_fan, left_speed, right_speed;
 
@@ -159,9 +143,7 @@ status()
     return 0;
 }
 
-void
-usage()
-{
+void usage() {
     printf("Usage: fanctl [command] [arguments]\n");
     printf("\n");
     printf("Commands:\n");
@@ -197,8 +179,7 @@ usage()
 }
 
 #ifdef LIB
-void init()
-{
+void init() {
     i8k_fd = open(I8K_PROC, O_RDONLY);
     if (i8k_fd < 0)
     {
@@ -206,19 +187,19 @@ void init()
         exit(-1);
     }
 }
-void finish()
-{
+
+void finish() {
     close(i8k_fd);
 }
 #else
+
 int
-main(int argc, char **argv)
-{
+main(int argc, char **argv) {
     if (argc >= 2) {
-	if ((strcmp(argv[1],"-h")==0) || (strcmp(argv[1],"--help")==0)) {
-	    usage();
-	    exit(0);
-	}
+        if ((strcmp(argv[1],"-h")==0) || (strcmp(argv[1],"--help")==0)) {
+            usage();
+            exit(0);
+        }
     }
 
     i8k_fd = open(I8K_PROC, O_RDONLY);
@@ -243,17 +224,20 @@ main(int argc, char **argv)
         argc--; argv++;
         ret = fan(argc,argv);
     }
+
     else if (strcmp(argv[1],"speed")==0) {
         ret = fan_speed(argc,argv);
     }
+
     else if (strcmp(argv[1],"temp")==0) {
         ret = cpu_temperature();
     }
 
     close(i8k_fd);
 
-    if (ret == -2)
+    if (ret == -2) {
         fprintf(stderr,"Invalid Selection: %s\n", argv[1]);
+    }
 
     return 0;
 }
