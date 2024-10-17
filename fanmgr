@@ -13,7 +13,7 @@ OVER_MAX=80  # Above OVER_MAX, max speed (2 2)
 PID="/tmp/fanmgr.pid"
 TEMP_HISTORY="/tmp/temp_history"
 SAMPLE_INTERVAL=1   # Temp check interval (seconds)
-SAMPLES=5           # Number of samples for mean average
+SAMPLES=15          # Number of samples for mean average
 
 #####################
 #      HELPERS      #
