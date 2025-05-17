@@ -23,9 +23,6 @@ For my particular laptop, there are effectively 4 configurations for fan control
     High: Left Speed: 5500 Right Speed: 5500
     Intense: Left Speed: 6400 Right Speed: 5800
 
-If you are going to use Linux, I highly recommend Manjaro/i3. It is a very well-maintained distro,
-with i3 out of the box so you don't have to remove GNOME/x11.
-
 ## Safety
 
 The Alienware Laptops come with Alienware Command Center on Windows distributions. They provide the same functionality,
@@ -56,7 +53,7 @@ echo "i8k" | sudo tee /etc/modules-load.d/i8k.conf
 echo "options i8k force=1" | sudo tee /etc/modprobe.d/i8k.conf
 ```
 
-# Those on whose shoulders I stand
+# Smarter people than me
 
     Pablo Bianucci <pbian@physics.utexas.edu>
 
